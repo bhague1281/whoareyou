@@ -4,6 +4,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var minifyCss = require('gulp-minify-css');
 var autoprefixer = require('gulp-autoprefixer');
 var uglify = require('gulp-uglify');
+var nodemon = require('gulp-nodemon');
 
 var sassInput = './src/scss/**/*.scss';
 var sassOptions = {
@@ -34,10 +35,18 @@ gulp.task('js', function() {
 });
 
 gulp.task('watch', ['sass', 'js'], function() {
-  return gulp
-  .watch('./src/scss/**/*.scss', ['sass'])
+  gulp.watch('./src/scss/**/*.scss', ['sass'])
   .on('change', function(event) {
     console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+  });
+
+  gulp.watch('./src/app/**/*.js', ['js'])
+  .on('change', function(event) {
+    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+  });
+
+  nodemon({
+    script: 'server.js'
   });
 });
 
